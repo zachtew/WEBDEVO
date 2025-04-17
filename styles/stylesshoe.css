@@ -1,0 +1,45 @@
+/* 1. Global font family applied to the whole page */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;      /* Horizontal centering */
+    justify-content: center;  /* Vertical centering */
+    min-height: 100vh;
+    box-sizing: border-box;
+  }
+  
+  /* 2. Header div style */
+  .header {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+    max-width: 800px;
+  }
+  
+  /* 3. Content div style */
+  .content {
+    background-color: white;
+    margin: 20px auto;
+    padding: 30px;
+    width: 80%;
+    max-width: 800px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  /* 4. Footer div style */
+  .footer {
+    background-color: #222;
+    color: #ccc;
+    text-align: center;
+    padding: 15px;
+    width: 100%;
+    max-width: 800px;
+    margin-top: 20px;
+  }

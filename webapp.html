@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Riddle Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f8ff;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      text-align: center;
+      margin: 5rem auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .riddle {
+      margin-bottom: 1rem;
+      font-weight: bold;
+      min-height: 50px;
+    }
+
+    button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin: 0.5rem;
+      position: absolute;
+    }
+
+    #nextRiddle {
+      background: #007bff;
+      color: white;
+    }
+
+    #nextRiddle:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    #playAgain {
+      background: #28a745;
+      color: white;
+      display: none;
+      position: static;
+    }
+
+    .message {
+      margin-top: 1rem;
+      color: #555;
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Riddle Generator</h1>
+  <div class="riddle" id="riddle">Click the button to get a riddle!</div>
+  <button id="nextRiddle">Get Riddle</button>
+  <button id="playAgain">Play Again</button>
+  <div class="message" id="message"></div>
+</div>
+
+<script>
+  const riddles = [
+    "What has keys but can't open locks? — A piano.",
+    "What has hands but can’t clap? — A clock.",
+    "What has a neck but no head? — A bottle.",
+    "What gets wetter the more it dries? — A towel.",
+    "What can travel around the world while staying in the same corner? — A stamp.",
+    "What comes once in a minute, twice in a moment, but never in a thousand years? — The letter M."
+  ];
+
+  let usedRiddles = [];
+  let riddleCount = 0;
+
+  const riddleDiv = document.getElementById('riddle');
+  const nextBtn = document.getElementById('nextRiddle');
+  const playAgainBtn = document.getElementById('playAgain');
+  const messageDiv = document.getElementById('message');
+
+  // Position & speed for bouncing button
+  let x = 100, y = 100;
+  let dx = 1.5, dy = 1.2;
+  let speedMultiplier = 1.0;
+
+  function moveButton() {
+    const btn = nextBtn;
+    const btnWidth = btn.offsetWidth;
+    const btnHeight = btn.offsetHeight;
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+
+    x += dx * speedMultiplier;
+    y += dy * speedMultiplier;
+
+    if (x + btnWidth >= screenWidth || x <= 0) dx *= -1;
+    if (y + btnHeight >= screenHeight || y <= 0) dy *= -1;
+
+    btn.style.left = `${x}px`;
+    btn.style.top = `${y}px`;
+
+    requestAnimationFrame(moveButton);
+  }
+
+  moveButton(); // Start bouncing
+
+  function getRandomRiddle() {
+    const unusedRiddles = riddles.filter(r => !usedRiddles.includes(r));
+    if (unusedRiddles.length === 0) return null;
+    const index = Math.floor(Math.random() * unusedRiddles.length);
+    return unusedRiddles[index];
+  }
+
+  function showRiddle() {
+    if (riddleCount >= 3) return;
+
+    const riddle = getRandomRiddle();
+    if (!riddle) {
+      riddleDiv.textContent = "No more riddles available!";
+      return;
+    }
+
+    riddleDiv.textContent = riddle;
+    usedRiddles.push(riddle);
+    riddleCount++;
+
+    if (riddleCount >= 3) {
+      nextBtn.disabled = true;
+      messageDiv.textContent = "That's all! Click 'Play Again' to restart.";
+      playAgainBtn.style.display = "inline-block";
+    }
+  }
+
+  function resetGame() {
+    usedRiddles = [];
+    riddleCount = 0;
+    riddleDiv.textContent = "Click the button to get a riddle!";
+    messageDiv.textContent = "";
+    nextBtn.disabled = false;
+    playAgainBtn.style.display = "none";
+    speedMultiplier = 1.0;
+  }
+
+  nextBtn.addEventListener('click', () => {
+    showRiddle();
+    speedMultiplier += 0.3; // Speed up on each click
+  });
+
+  playAgainBtn.addEventListener('click', resetGame);
+</script>
+
+</body>
+</html>
